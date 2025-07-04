@@ -23,7 +23,7 @@ class DataController(BaseController):
         
         return True, ResponseSignal.FILE_VALIDATED.value
     
-    def generate_uniqie_filename(self, orig_file_name: str, project_id: str):
+    def generate_uniqie_filepath(self, orig_file_name: str, project_id: str):
         """
         Generate the file name for the uploaded file.
         """
@@ -46,7 +46,7 @@ class DataController(BaseController):
                 f"{random_key}_{cleaned_file_name}"
             )
             
-        return new_file_path
+        return new_file_path, f"{random_key}_{cleaned_file_name}"
     
     
     def get_clean_filename(self, orig_file_name: str):
