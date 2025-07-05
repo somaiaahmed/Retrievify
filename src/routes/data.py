@@ -67,7 +67,7 @@ async def process_endpoint(project_id: str, process_request: ProcessRequest, app
     Process the uploaded file in the specified project.
     """
     file_id = process_request.file_id
-    chunck_size = process_request.chunck_size
+    chunk_size = process_request.chunk_size
     overlap_size = process_request.overlap_size
     
     process_controller = ProcessController(project_id=project_id)
@@ -77,7 +77,7 @@ async def process_endpoint(project_id: str, process_request: ProcessRequest, app
     file_chunks = process_controller.process_file_content(
         file_id=file_id,
         file_content=file_content,
-        chunk_size=chunck_size,
+        chunk_size=chunk_size,
         overlap_size=overlap_size
     )
     
