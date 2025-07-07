@@ -1,5 +1,5 @@
 from .BaseDataModel import BaseDataModel
-from .db_schemes import project
+from .db_schemes import Project
 from .enums.DataBaseEnum import DataBaseEnum 
 
 class ProjectModel(BaseDataModel):
@@ -10,14 +10,14 @@ class ProjectModel(BaseDataModel):
         
     
         
-    async def create_project(self, project: project):
+    async def create_project(self, project: Project):
         """
         Create a new project in the database.
         
         """
         
-        res = await self.collection.insert_one(project.dict())
-        project._id = res.inserted_id
+        result = await self.collection.insert_one(project.dict(by_alias=True, exclude_unset=True))
+        project._id = result.inserted_id
         
         return project
     

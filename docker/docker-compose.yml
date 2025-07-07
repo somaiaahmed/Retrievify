@@ -1,22 +1,21 @@
-version: '3.8'  # Recommended to specify the Compose file version
-
 services:
   mongodb:
     image: mongo:7.0-jammy
-
     container_name: mongodb
-
     ports:
-      - "27007:27017"
-
+      - "27017:27017"  
     volumes:
-      - ./mongodb:/data/db
-
+      - mongodb_data:/data/db  
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin  
+      MONGO_INITDB_ROOT_PASSWORD: admin
     networks:
       - backend
-    
-    restart: always
-
+    restart: unless-stopped  # Better than 'always'
 
 networks:
   backend:
+    driver: bridge
+
+volumes:
+  mongodb_data:  
