@@ -35,7 +35,7 @@ class ProcessController(BaseController):
         if file_extension == ProcessingEnum.TXT.value:
             return TextLoader(file_path, encoding='utf-8')
         
-        elif file_extension ==  processingEnum.PDF.value:
+        elif file_extension ==  ProcessingEnum.PDF.value:
             return PyPDFLoader(file_path, encoding='utf-8')
         
         else:
