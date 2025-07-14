@@ -36,7 +36,7 @@ class LLMInterface(ABC):
         pass
     
     @abstractmethod
-    def construct_prompt(self, prompt: str. role: str):
+    def construct_prompt(self, prompt: str, role: str):
         """
         Construct a prompt with the specified role.
         """
