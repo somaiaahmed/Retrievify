@@ -1,6 +1,6 @@
 from ..LLMInterface import LLMInterface
 from .LLMEnums import OPENAIEnums
-from opemai import OpenAI
+from openai import OpenAI
 import logging
 
 
