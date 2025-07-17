@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
+from models.db_schemes import RetrievedDocument
 
 class VectorDBInterface(ABC):
     """
@@ -79,7 +80,7 @@ class VectorDBInterface(ABC):
         pass
     
     @abstractmethod
-    def search_by_vector(self, collection_name: str, vector: list, limit: int = 10):
+    def search_by_vector(self, collection_name: str, vector: list, limit: int = 10) -> List[RetrievedDocument]:
         """
         Search for records in the VectorDB by vector similarity.
         """
