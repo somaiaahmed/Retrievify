@@ -16,6 +16,8 @@ class ResponseSignal(Enum):
     INSERT_INTO_VECTORDB_ERROR = "Error inserting data into the database."
     INSERT_INTO_VECTORDB_SUCCESS = "Data inserted into the vector database successfully."
     VECTORDB_COLLECTION_RETRIEVED = "Vector database collection retrieved successfully."
-    VECTORD_SEARCH_SUCCESS = "Vector database search completed successfully."
-    VECTORD_SEARCH_ERORR = "Vector database search failed."
+    VECTORDB_SEARCH_SUCCESS = "Vector database search completed successfully."
+    VECTORDB_SEARCH_ERROR = "Vector database search failed."
+    RAG_ANSWER_ERROR = "Error answering the RAG question."
+    RAG_ANSWER_SUCCESS = "RAG question answered successfully."
    
