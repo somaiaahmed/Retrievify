@@ -7,7 +7,7 @@ class LLMInterface(ABC):
     """
     
     @abstractmethod
-    def set_genertion_model(self, model_id: str):
+    def set_generation_model(self, model_id: str):
         """
         Set the generation model to be used by the LLM.
         """
