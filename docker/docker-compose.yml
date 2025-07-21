@@ -13,9 +13,25 @@ services:
       - backend
     restart: unless-stopped  # Better than 'always'
 
+
+  pgvector:
+    image: pgvector/pgvector:0.8.0-pg17
+    container_name: pgvector
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}  
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    restart: unless-stopped  # Better than 'always'
+
 networks:
   backend:
     driver: bridge
 
 volumes:
   mongodb_data:  
+  pgvector_data:
