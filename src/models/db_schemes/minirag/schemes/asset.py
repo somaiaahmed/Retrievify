@@ -20,9 +20,10 @@ class Asset(SQLAlchemyBase):
     asset_project_id = Column(Integer, ForeignKey('projects.project_id'), nullable=False)
     
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
     project = relationship("Project", back_populates="assets")
+    chunks = relationship("DataChunk", back_populates="asset")
    
     __table_args__ = (
         Index('ix_asset_project_id', asset_project_id),
