@@ -15,7 +15,7 @@ nlp_router = APIRouter(
 )
 
 @nlp_router.post("/index/push/{project_id}")
-async def index_project(request: Request, project_id: str, push_request: PushRequest):
+async def index_project(request: Request, project_id: int, push_request: PushRequest):
     """
     Endpoint to push a project for indexing.
     """
@@ -52,7 +52,7 @@ async def index_project(request: Request, project_id: str, push_request: PushReq
     idx = 0
     
     while has_records:
-        page_chunks = await chunk_model.get_project_chunks(project_id=project.id, page_no=page_no)
+        page_chunks = await chunk_model.get_project_chunks(project_id=project.project_id, page_no=page_no)
         if len(page_chunks):
             page_no += 1
             
@@ -87,7 +87,7 @@ async def index_project(request: Request, project_id: str, push_request: PushReq
     )   
     
 @nlp_router.get("/index/info/{project_id}")
-async def get_project_index_project(request: Request, project_id: str):
+async def get_project_index_project(request: Request, project_id: int):
     """
     Endpoint to get the status of a project indexing.
     """
@@ -127,7 +127,7 @@ async def get_project_index_project(request: Request, project_id: str):
     )
     
 @nlp_router.post("/index/search/{project_id}")
-async def search_index(request: Request, project_id: str, search_request: SearchRequest):
+async def search_index(request: Request, project_id: int, search_request: SearchRequest):
     """
     Endpoint to search a project index.
     """
@@ -176,7 +176,7 @@ async def search_index(request: Request, project_id: str, search_request: Search
     )
 
 @nlp_router.post("/index/answer/{project_id}")
-async def answer_rag(request: Request, project_id: str, search_request: SearchRequest):
+async def answer_rag(request: Request, project_id: int, search_request: SearchRequest):
     """ 
     Endpoint to answer a question using RAG.
     """
