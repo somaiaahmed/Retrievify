@@ -13,6 +13,7 @@ class QdrantDBProvider(VectorDBInterface):
         self.client = None
         self.db_client = db_client
         self.distance_method = None
+        self.default_vector_size = default_vector_size
 
         if distance_method == DistanceMethodEnums.COSINE.value:
             self.distance_method = models.Distance.COSINE
@@ -56,7 +57,8 @@ class QdrantDBProvider(VectorDBInterface):
         Delete a collection from the QdrantDB.
         """
         if self.is_collection_exists(collection_name): 
-            self.client.delete_collection(collection_name=collection_name)
+            self.logger.info(f"Deleting collection: {collection_name}")
+            return self.client.delete_collection(collection_name=collection_name)
 
     async def create_collection(self, collection_name: str, 
                                 embedding_size: int,
