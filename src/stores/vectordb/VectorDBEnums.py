@@ -8,7 +8,7 @@ class DistanceMethodEnums(Enum):
     COSINE = "Cosine"
     DOT = "Dot"
     
-class PgVectorTableShemeEnums(Enum):
+class PgVectorTableSchemeEnums(Enum):
     ID = "id"
     TEXT = "text"
     VECTOR = "vector"
