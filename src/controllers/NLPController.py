@@ -23,27 +23,27 @@ class NLPController(BaseController):
         """
         Creates a collection name based on the project ID.
         """
-        return f"collection_{project_id}".strip()
+        return f"collection_{self.vectordb_client.default_vector_size}_{project_id}".strip()
     
-    def reset_vectordb_collection(self, project: Project):
+    async def reset_vectordb_collection(self, project: Project):
         """
         Resets the vector database collection for the given project.
         """
         collection_name = self.create_collection_name(project_id=project.project_id)
-        return self.vectordb_client.delete_collection(collection_name=collection_name)
+        return await self.vectordb_client.delete_collection(collection_name=collection_name)
 
-    def get_vectordb_collection_info(self, project: Project):
+    async def get_vectordb_collection_info(self, project: Project):
         """
         Retrieves information about the vector database collection for the given project.
         """
         collection_name = self.create_collection_name(project_id=project.project_id)
-        collection_info = self.vectordb_client.get_collection_info(collection_name=collection_name)
+        collection_info = await self.vectordb_client.get_collection_info(collection_name=collection_name)
         
         return json.loads(
             json.dumps(collection_info, default=lambda x: x.__dict__)
         )
-    
-    def index_into_vectordb(self, project: Project, chunks: List[DataChunk],
+
+    async def index_into_vectordb(self, project: Project, chunks: List[DataChunk],
                             chunks_ids: List[int],
                             do_reset: bool = False):
         """
@@ -62,21 +62,18 @@ class NLPController(BaseController):
             c.chunk_metadata for c in chunks
         ]
         
-        vectors = [
-            self.embedding_client.embed_text(text=text,
+        vectors = self.embedding_client.embed_text(text=texts,
                                              document_type=DocumentTypeEnum.DOCUMENT.value) 
-            for text in texts
-        ]
         
         # step3: create collection if not exists
-        _ = self.vectordb_client.create_collection(
+        _ = await self.vectordb_client.create_collection(
             collection_name=collection_name,
             embedding_size=self.embedding_client.embedding_size,
             do_reset=do_reset,
         )
         
         # step 4: insert into vectordb
-        _ = self.vectordb_client.insert_many(
+        _ = await self.vectordb_client.insert_many(
             collection_name=collection_name,
             texts=texts,
             metadata=metadata,
@@ -86,10 +83,11 @@ class NLPController(BaseController):
         
         return True
     
-    def search_vectordb_collection(self, project: Project, text: str, limit: int = 10):
+    async def search_vectordb_collection(self, project: Project, text: str, limit: int = 10):
         """
         Searches the vector database collection for the given project using the provided text.
         """
+        query_vector = None
         collection_name = self.create_collection_name(project_id=project.project_id)
         
         # step 1: embed the search text
@@ -101,10 +99,16 @@ class NLPController(BaseController):
         if not vector or len(vector) == 0:
             return False
         
+        if isinstance(vector, list) and len(vector) > 0:
+            query_vector = vector[0]
+
+        if not query_vector:
+            return False
+
         # step 2: search in vectordb
-        results = self.vectordb_client.search_by_vector(
+        results = await self.vectordb_client.search_by_vector(
             collection_name=collection_name,
-            vector=vector,
+            vector=query_vector,
             limit=limit
         )
         
@@ -113,7 +117,7 @@ class NLPController(BaseController):
         
         return results
     
-    def answer_rag_question(self, project: Project, query: str, limit: int = 10):
+    async def answer_rag_question(self, project: Project, query: str, limit: int = 10):
         """
         Answers a question using the RAG (Retrieval-Augmented Generation) approach.
         """
@@ -121,7 +125,7 @@ class NLPController(BaseController):
         answer, full_prompt, chat_history = None, None, None
         
         # step 1: retrieve relevant documents from the vector database
-        retrieved_documents = self.search_vectordb_collection(
+        retrieved_documents = await self.search_vectordb_collection(
             project=project,
             text=query,
             limit=limit

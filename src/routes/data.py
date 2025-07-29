@@ -12,6 +12,7 @@ from models.ChunkModel import ChunkModel
 from models.AssetModel import AssetModel
 from models.db_schemes import DataChunk, Asset
 from models.enums.AssetTypeEnum import AssetTypeEnum
+from controllers import NLPController
 
 
 
@@ -109,6 +110,13 @@ async def process_endpoint(request: Request, project_id: int, process_request: P
         project_id=project_id
     )
     
+    nlp_controller = NLPController(
+        vectordb_client=request.app.vectordb_client,
+        generation_client=request.app.generation_client,
+        embedding_client=request.app.embedding_client,
+        template_parser= request.app.template_parser,
+    )
+    
     asset_model = await AssetModel.create_instance(
         db_client=request.app.db_client
     )
@@ -163,6 +171,13 @@ async def process_endpoint(request: Request, project_id: int, process_request: P
     )
     
     if do_reset == 1:
+        # delete asociated vector collection
+        collection_name = nlp_controller.create_collection_name(project_id=project.project_id)
+        _ = await nlp_controller.vectordb_client.delete_collection(
+            collection_name=collection_name
+        )
+        
+        # delete chunks in the database
         _ = await chunk_model.delete_chunks_by_project_id(
             project_id=project.project_id
         )
