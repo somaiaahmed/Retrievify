@@ -5,7 +5,8 @@ A **production-ready Retrieval-Augmented Generation (RAG)** system combining pow
 
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Dockerized](https://img.shields.io/badge/Docker-Containerized-blue)](https://www.docker.com/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
 
 ---
 
