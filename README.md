@@ -70,8 +70,8 @@ Built with:
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/mini-rag.git
-cd mini-rag
+git clone https://github.com/somaiaahmed/Retrievify.git
+cd Retrievify
 ````
 
 ### 2. Set environment variables
